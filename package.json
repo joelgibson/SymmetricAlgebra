@@ -1,0 +1,16 @@
+{
+  "scripts": {
+    "build": "tsc --project tsconfig.json",
+    "test": "tsc test.ts --outFile test.js --sourceMap && mocha --require source-map-support/register test.js",
+    "clean": "rm *.js *.js.map"
+  },
+  "dependencies": {
+    "typescript": "^2.5.2"
+  },
+  "devDependencies": {
+    "@types/mocha": "^2.2.42",
+    "@types/node": "^8.0.26",
+    "mocha": "^3.5.0",
+    "source-map-support": "^0.4.17"
+  }
+}

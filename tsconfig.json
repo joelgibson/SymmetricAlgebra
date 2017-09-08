@@ -1,0 +1,11 @@
+{
+    "compilerOptions": {
+        "strict": true,
+        "target": "es3",
+        "module": "none",
+        "outFile": "symfunc.js"
+    },
+    "files": [
+        "interface.ts"
+    ]
+}

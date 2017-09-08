@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+    <meta charset="utf-8">
+    <title>Symmetric Algebra</title>
+    <style>
+        body { font-size: 1.1em;}
+        #error {
+            border: 1px solid red;
+        }
+        .error { background-color: lightpink }
+        .code { font-family: monospace; font-size: 1.1em; }
+        #computation {
+            width: 20em;
+        }
+    </style>
+</html>
+<body>
+    <form id="computationForm" autocomplete="off">
+    <div id="computeIn">
+        <label for="algebra">Compute within:</label><br>
+            <input type="radio" name="algebra" id="sym" value="sym" checked><label for="sym">Rep Sym</label><br>
+            <input type="radio" name="algebra" id="gl" value="gl"><label for="gl">Rep GL_n</label>
+            where n=<input type="number" id="gln" min="2" value="3" style="width: 3em;">
+    </div>
+    <div>
+        <label for="computation">Computation:</label> <input type="text" id="computation" value="[2, 1] * 2[1]" class="code">
+        <input type="submit" value="Go">
+    </div>
+    <div id="error" style="display:none;">
+        Error: <span id="errorMessage"></span><br>
+        Input: <span id="errorInput" class="code"></span>
+    </div>
+    </form>
+
+    <p>
+        Result: <span id="result" class="code"></span>
+    </p>
+
+    <p>
+        Decomposition:
+        <table id="decomposition">
+            <tr><th>Partition</th><th>Multiplicity</th><th>Dimension</th></tr>
+        </table>
+    </p>
+
+    <script type="text/javascript" src="symfunc.js"></script>
+</body>
+</html>
