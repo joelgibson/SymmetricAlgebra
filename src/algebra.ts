@@ -59,7 +59,7 @@ class AlgebraType {
 
     // Return in which GL_n the two partitions should be tensored.
     tensorIn(part1: Partition, part2: Partition) {
-        return (this.algebra == 'gl') ? this.n : part1.length + part2.length + 1
+        return (this.algebra == 'gl') ? this.n : part1.length + part2.length;
     }
 
     // Dimension of the irreducible corresponding to the given partition.
@@ -77,9 +77,18 @@ function algebraMul(type: AlgebraType, ...lins: Linear[]) {
     for (let i = 1; i < lins.length; i++) {
         let product: Linear = [];
         for (const {part: part1, mult: mult1} of sofar)
-            for (const {part: part2, mult: mult2} of lins[i])
+            for (const {part: part2, mult: mult2} of lins[i]) {
+                if (part1.length == 0) {
+                    product.push({part: part2, mult: mult1 * mult2});
+                    continue;
+                }
+                if (part2.length == 0) {
+                    product.push({part: part1, mult: mult1 * mult2});
+                    continue;
+                }
                 for (const part of tensorPartitions(type.tensorIn(part1, part2), part1, part2))
                     product.push({part: part, mult: mult1 * mult2});
+            }
 
         sofar = algebraNormalise(product);
     }

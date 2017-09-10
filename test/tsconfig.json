@@ -1,0 +1,9 @@
+{
+    "extends": "../tsconfig",
+    "compilerOptions": {
+        "outFile": "test.js"
+    },
+    "files": [
+        "test.ts"
+    ]
+}

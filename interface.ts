@@ -1,4 +1,4 @@
-/// <reference path="parse.ts"/>
+/// <reference path="src/parse.ts"/>
 
 // Read a configuration out of the config form.
 function readConfig(): AlgebraType {
@@ -83,9 +83,9 @@ function frameError(err: ParseError, str: string) {
 let $computationForm = <HTMLFormElement>document.getElementById('computationForm');
 $computationForm.addEventListener('submit', (event) => {
     event.preventDefault();
-    doComputation();
 });
 $computationForm.addEventListener('change', (event) => {
+    event.preventDefault();
     doComputation();
 });
 

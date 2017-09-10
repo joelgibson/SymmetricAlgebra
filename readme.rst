@@ -13,12 +13,14 @@ Use
 
     npm install
 
-to install the typescript compiler and testing libraries. The only dependency of the code itself is the typescript compiler. Then, use
+to install the typescript compiler and testing/benchmarking libraries. The only dependency of the code itself is the typescript compiler, and it has no runtime dependencies. Here are some handy commands defined in :code:`package.json`:
 
 .. code-block:: fish
 
-    npm test              # Generate test.js and run the tests.
+    npm test              # Run the tests in test/
+    npm run-script bench  # Run the benchmarks in bench/
     npm run-script build  # Generate symfunc.js from interface.ts.
+    npm run-script clean  # Remove all compiled javascript and sourcemap files.
 
 The file :code:`SymmetricAlgebra.html` has a barebones implementation of what you might do with this, and is tightly coupled to :code:`interface.ts`. Aside from that, the rest of the code should be fairly usable as a library, and is roughly structured as follows:
 

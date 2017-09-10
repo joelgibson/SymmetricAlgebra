@@ -3,7 +3,8 @@
         "strict": true,
         "target": "es3",
         "module": "none",
-        "outFile": "symfunc.js"
+        "outFile": "symfunc.js",
+        "sourceMap": true
     },
     "files": [
         "interface.ts"

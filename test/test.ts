@@ -1,6 +1,6 @@
-/// <reference path="parse.ts"/>
+/// <reference path="../src/parse.ts"/>
 
-const assert = require('assert');   
+const assert = require('assert');
 
 describe('Crystals', () => {
     it('Recognises Partitions', () => {
@@ -29,6 +29,10 @@ describe('Crystals', () => {
     
     it('Expands crystals from highest weights', () => {
         assert.deepEqual(expandInGL(3, [1]), [[1], [2], [3]])
+        assert.deepEqual(expandInGL(3, [1, 2]), [[1, 2], [1, 3], [2, 3]])
+        assert.deepEqual(expandInGL(3, [1, 1]), [[1, 1], [2, 1], [2, 2], [3, 1], [3, 2], [3, 3]])
+        assert.deepEqual(expandInGL(3, [1, 1, 2]),
+            [[1, 1, 2], [2, 1, 2], [1, 1, 3], [3, 1, 2], [2, 1, 3], [3, 1, 3], [2, 2, 3], [3, 2, 3]])
         assert.deepEqual(expandInGL(3, [1, 2, 3]), [[1, 2, 3]])
     })
 
@@ -63,6 +67,15 @@ describe('algebra', () => {
         assert.deepEqual(
             addParts([], [], [2, 1], [], [1]),
             [{part: [2, 1], mult: 1}, {part: [1], mult: 1}, {part: [], mult: 3}])
+    })
+
+    it('Tensors respecting units', () => {
+        assert.deepEqual(
+            algebraMul(AlgebraType.Sym, algebraUnit(2), algebraPart([2, 2])),
+            addParts([2, 2], [2, 2]))
+        assert.deepEqual(
+            algebraMul(AlgebraType.Sym, algebraPart([2, 2]), algebraUnit(2)),
+            addParts([2, 2], [2, 2]))
     })
 
     it('Tensors in the Symmetric Algebra', () => {
