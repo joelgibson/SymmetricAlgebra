@@ -26,14 +26,21 @@ describe('Crystals', () => {
         assert.deepEqual(hwToPartition([1,1,2,2,1]), [3, 2])
         assert.deepEqual(hwToPartition([1,1,2,1,2,3]), [3, 2, 1])
     })
+
+    // Assert equality of two lists of lists of numbers after sorting them.
+    function assertMultisetEq(first: number[][], second: number[][]) {
+        const firstSorted = first.slice(0).sort(compareLists);
+        const secondSorted = second.slice(0).sort(compareLists);
+        assert.deepEqual(firstSorted, secondSorted)
+    }
     
     it('Expands crystals from highest weights', () => {
-        assert.deepEqual(expandInGL(3, [1]), [[1], [2], [3]])
-        assert.deepEqual(expandInGL(3, [1, 2]), [[1, 2], [1, 3], [2, 3]])
-        assert.deepEqual(expandInGL(3, [1, 1]), [[1, 1], [2, 1], [2, 2], [3, 1], [3, 2], [3, 3]])
-        assert.deepEqual(expandInGL(3, [1, 1, 2]),
+        assertMultisetEq(expandInGL(3, [1]), [[1], [2], [3]])
+        assertMultisetEq(expandInGL(3, [1, 2]), [[1, 2], [1, 3], [2, 3]])
+        assertMultisetEq(expandInGL(3, [1, 1]), [[1, 1], [2, 1], [2, 2], [3, 1], [3, 2], [3, 3]])
+        assertMultisetEq(expandInGL(3, [1, 1, 2]),
             [[1, 1, 2], [2, 1, 2], [1, 1, 3], [3, 1, 2], [2, 1, 3], [3, 1, 3], [2, 2, 3], [3, 2, 3]])
-        assert.deepEqual(expandInGL(3, [1, 2, 3]), [[1, 2, 3]])
+            assertMultisetEq(expandInGL(3, [1, 2, 3]), [[1, 2, 3]])
     })
 
     it('Computes dimensions of crystals', () => {
