@@ -33,7 +33,7 @@ describe('Crystals', () => {
         const secondSorted = second.slice(0).sort(compareLists);
         assert.deepEqual(firstSorted, secondSorted)
     }
-    
+
     it('Expands crystals from highest weights', () => {
         assertMultisetEq(expandInGL(3, [1]), [[1], [2], [3]])
         assertMultisetEq(expandInGL(3, [1, 2]), [[1, 2], [1, 3], [2, 3]])
@@ -89,13 +89,28 @@ describe('algebra', () => {
         assert.deepEqual(
             algebraMul(AlgebraType.Sym, algebraPart([1]), algebraPart([1])),
             addParts([1, 1], [2]))
-        
+
         assert.deepEqual(
             algebraMul(AlgebraType.Sym, algebraPart([1]), algebraPart([1]), algebraPart([1])),
             addParts([1, 1, 1], [2, 1], [2, 1], [3]))
-        
+
+        assert.deepEqual(
+            algebraPow(AlgebraType.Sym, algebraPart([1]), 3),
+            addParts([1, 1, 1], [2, 1], [2, 1], [3]))
+
         assert.deepEqual(
             algebraMul(AlgebraType.Sym, algebraPart([2, 1]), algebraPart([2, 1])),
+            addParts(
+                [2, 2, 1, 1],
+                [2, 2, 2],
+                [3, 1, 1, 1],
+                [3, 2, 1], [3, 2, 1],
+                [3, 3],
+                [4, 1, 1],
+                [4, 2]))
+
+        assert.deepEqual(
+            algebraPow(AlgebraType.Sym, algebraPart([2, 1]), 2),
             addParts(
                 [2, 2, 1, 1],
                 [2, 2, 2],
@@ -114,9 +129,17 @@ describe('algebra', () => {
         assert.deepEqual(
             algebraMul(AlgebraType.GL(2), algebraPart([1]), algebraPart([1]), algebraPart([1])),
             addParts([2, 1], [2, 1], [3]))
-        
+
+        assert.deepEqual(
+            algebraPow(AlgebraType.GL(2), algebraPart([1]), 3),
+            addParts([2, 1], [2, 1], [3]))
+
         assert.deepEqual(
             algebraMul(AlgebraType.GL(2), algebraPart([2, 1]), algebraPart([2, 1])),
+            addParts([3, 3], [4, 2]))
+
+        assert.deepEqual(
+            algebraPow(AlgebraType.GL(2), algebraPart([2, 1]), 2),
             addParts([3, 3], [4, 2]))
     })
 
@@ -124,13 +147,25 @@ describe('algebra', () => {
         assert.deepEqual(
             algebraMul(AlgebraType.GL(3), algebraPart([1]), algebraPart([1])),
             addParts([1, 1], [2]))
-        
+
         assert.deepEqual(
             algebraMul(AlgebraType.GL(3), algebraPart([1]), algebraPart([1]), algebraPart([1])),
             addParts([1, 1, 1], [2, 1], [2, 1], [3]))
-        
+
+        assert.deepEqual(
+            algebraPow(AlgebraType.GL(3), algebraPart([1]), 3),
+            addParts([1, 1, 1], [2, 1], [2, 1], [3]))
+
         assert.deepEqual(
             algebraMul(AlgebraType.GL(3), algebraPart([2, 1]), algebraPart([2, 1])),
+            addParts(
+                [2, 2, 2],
+                [3, 2, 1], [3, 2, 1],
+                [3, 3],
+                [4, 1, 1],
+                [4, 2]))
+        assert.deepEqual(
+            algebraPow(AlgebraType.GL(3), algebraPart([2, 1]), 2),
             addParts(
                 [2, 2, 2],
                 [3, 2, 1], [3, 2, 1],
@@ -154,6 +189,7 @@ describe('Parser', () => {
         assert.deepEqual(stripRPN(toRPN('(3 + 4)* 5')), [3, 4, '+', 5, '*'])
         assert.deepEqual(stripRPN(toRPN('2+ [2, 1]+ 3')), [2, [2, 1], '+', 3, '+'])
         assert.deepEqual(stripRPN(toRPN('2[1]')), [2, [1], '*'])
+        assert.deepEqual(stripRPN(toRPN('[1]^2')), [[1], 2, '^'])
     })
 
     // Filter errors down to the pos and extent fields.
@@ -179,6 +215,7 @@ describe('Parser', () => {
     it('Evaluates in the Symmetric Algebra', () => {
         assert.deepEqual(evaluate(AlgebraType.Sym, "1 + 2"), algebraUnit(3))
         assert.deepEqual(evaluate(AlgebraType.Sym, "[2, 1] * [1]"), addParts([3, 1], [2, 2], [2, 1, 1]))
+        assert.deepEqual(evaluate(AlgebraType.Sym, "[1]^2"), addParts([2], [1, 1]))
     })
 
     it('Evaluates in GL_2', () => {
@@ -186,6 +223,7 @@ describe('Parser', () => {
         assert.deepEqual(evaluate(AlgebraType.GL(2), "[2, 1] * [1]"), addParts([3, 1], [2, 2]))
         assert.deepEqual(evaluate(AlgebraType.GL(2), "[3, 2, 1]"), algebraUnit(0))
         assert.deepEqual(evaluate(AlgebraType.GL(2), "[3, 2, 1] + 2[2, 1]"), addParts([2, 1], [2, 1]))
+        assert.deepEqual(evaluate(AlgebraType.GL(2), "[2]^2"), addParts([4], [3, 1], [2, 2]))
     })
 })
 
