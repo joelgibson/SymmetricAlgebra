@@ -96,6 +96,14 @@ function algebraMul(type: AlgebraType, ...lins: Linear[]) {
     return sofar;
 }
 
+// Exponentiation of linear combination, given which algebra we are working over.
+function algebraPow(type: AlgebraType, lin: Linear, pow: number) {
+    if (pow == 0)
+        return algebraUnit(1);
+
+    return algebraMul(type, ...(Array(pow).fill(lin)));
+}
+
 // Represent a linear combination as a string.
 function algebraString(lin: Linear): string {
     const output: string[] = [];
@@ -109,7 +117,7 @@ function algebraString(lin: Linear): string {
         }
         if (multStr == "1")
             multStr = "";
-        
+
         output.push(multStr + partStr)
     }
     if (output.length == 0)

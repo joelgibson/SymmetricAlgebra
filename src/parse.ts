@@ -1,6 +1,6 @@
 /// <reference path="algebra.ts"/>
 
-const precedence: {[s: string]: number} = {'+': 0, '*': 1}
+const precedence: {[s: string]: number} = {'+': 0, '*': 1, '^': 2}
 
 class ParseError {
     constructor(
@@ -37,6 +37,12 @@ function evaluate(type: AlgebraType, str: string): ParseError | Linear {
                 stack.push(algebraAdd(left, right));
             else if (item == '*')
                 stack.push(algebraMul(type, left, right));
+            else if (item == '^') {
+                if (right.length != 1 || right[0].part.length > 0)
+                    return new ParseError(pos, 1, `Exponent must be a number in ${item}`);
+                const exponent = right[0].mult;
+                stack.push(algebraPow(type, left, exponent));
+            }
         }
     }
     if (stack.length != 1)
@@ -51,7 +57,7 @@ function toRPN(str: string): ParseError | Item[] {
     const opStack: opStackItem[] = [];
     const outQueue: Item[] = [];
 
-    const re = /\s+|\d+|[+*()]|\[\s*\]|\[\s*\d+\s*(,\s*\d+\s*)*\]/g;
+    const re = /\s+|\d+|[+*^()]|\[\s*\]|\[\s*\d+\s*(,\s*\d+\s*)*\]/g;
     let matchArray: RegExpExecArray | null;
     let lastToken: string = "";
     let nextIndex = 0;
@@ -87,7 +93,7 @@ function toRPN(str: string): ParseError | Item[] {
             outQueue.push(new Item(parseInt(token, 10), currentPos));
         else if (token == '(')
             pushOp('(');
-        else if (token.match(/[+*]/) != null) {
+        else if (token.match(/[+*^]/) != null) {
             while (opStack.length != 0 && precedence[opStack[opStack.length - 1].tok] >= precedence[token])
                 outQueue.push(itemFromOp(opStack.pop()!));
             pushOp(token);
